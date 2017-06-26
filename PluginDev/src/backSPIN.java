@@ -75,7 +75,7 @@ public class backSPIN implements ExternalPopulationAlgorithmInterface {
 	private boolean boolVerboseOut;
 	// Constructor
 	// @param String for plugin
-	public backSPIN() {		super(backSPIN);	}
+	//public backSPIN() {		super(backSPIN);	}
 
 	// Overriding
 	// @spade return string "backSPIN"
