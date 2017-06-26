@@ -157,6 +157,117 @@ public class bSPIN extends R_Algorithm {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * This method formulates the backspin command from prompt options
+	 * then calls on the backspin.py script with the inputs.
+	 */
+	public static SElement performBackSPIN(String outFolderName, String inputFile, String outputFile){
+		//create a folder
+		if (outFolderName == null || outFolderName.isEmpty())
+		{
+			outFolderName = new HomeEnv().getUserTempFolder();
+			File outFN = new File(outFolderName);
+			File fName = new File("backSPIN");
+			makeOutputSubfolder(outFN, fName);
+			
+		}
+		try{
+
+			//			   			-i [inputfile]
+			//					   --input=[inputfile]
+			//					          Path of the cef formatted tab delimited file.
+			//					          Rows should be genes and columns single cells/samples.
+			//					          For further information on the cef format visit:
+			//					          https://github.com/linnarsson-lab/ceftools
+			String inFile = inputFile; 
+			//					   -o [outputfile]
+			//					   --output=[outputfile]
+			//					          The name of the file to which the output will be written
+			String outFile = outputFile; 
+			//					   -d [int]
+			//					          Depth/Number of levels: The number of nested splits that will 
+			//							  be tried by the algorithm
+			int numLevels = 0;
+			String levels = "-d "+numLevels;
+			//					   -t [int]
+			//					          Number of the iterations used in the preparatory SPIN.
+			//					          Defaults to 10
+			int numIterations = 10;
+			String iterations = "-t "+numIterations;
+			//					   -f [int]  
+			//					   Feature selection is performed before BackSPIN. Argument controls how many genes are seleceted.
+			//					   Selection is based on expected noise (a curve fit to the CV-vs-mean plot).
+			int numFeatures = 0;
+			String features = "-f "+numFeatures;
+
+			//					   -s [float]
+			//					          Controls the decrease rate of the width parameter used in the preparatory SPIN.
+			//					          Smaller values will increase the number of SPIN iterations and result in higher 
+			//					          precision in the first step but longer execution time.
+			//					          Defaults to 0.05
+			double widthSPIN = 0.05;
+			String wSPIN = "-s "+widthSPIN;
+			//					   -T [int]
+			//					          Number of the iterations used for every width parameter.
+			//					          Does not apply on the first run (use -t instead)
+			//					          Defaults to 8
+			int numWidthIters = 8;
+			String wIters = "-T "+numWidthIters;
+			//					   -S [float]
+			//					          Controls the decrease rate of the width parameter.
+			//					          Smaller values will increase the number of SPIN iterations and result in higher 
+			//					          precision but longer execution time.
+			//					          Does not apply on the first run (use -s instead)
+			//					          Defaults to 0.25
+			double widthDecrease = 0.25;
+			String wDec = "-S " +widthDecrease;
+			//					   -g [int]
+			//					          Minimal number of genes that a group must contain for splitting to be allowed.
+			//					          Defaults to 2
+			int minGene = 2;
+			String minimumGene = "-g "+minGene;
+			//					   -c [int]
+			//					          Minimal number of cells that a group must contain for splitting to be allowed.
+			//					          Defaults to 2
+			int minCell = 2;
+			String minimumCell = "-c "+minCell;
+			//					   -k [float]
+			//					          Minimum score that a breaking point has to reach to be suitable for splitting.
+			//					          Defaults to 1.15
+			double minSplit = 1.15;
+			String minimumSplit = "-k "+minSplit;
+			//					   -r [float]
+			//					          If the difference between the average expression of two groups is lower than threshold the algorythm 
+			//					          uses higly correlated genes to assign the gene to one of the two groups
+			//					          Defaults to 0.2
+			double avgExpDiff = 0.2;
+			String averageExpDiff = "-r "+avgExpDiff;
+			//					   -b [axisvalue]
+			//					          Run normal SPIN instead of backSPIN.
+			//					          Normal spin accepts the parameters -T -S
+			//					          An axis value 0 to only sort genes (rows), 1 to only sort cells (columns) or 'both' for both
+			//					          must be passed
+			boolean onlySPIN = false; 
+			if(onlySPIN == true){
+				String nSPINt = "-T ";
+				String nSPINs = "-S ";
+				boolean bothGeneCells = false; 
+				int onlyGene = 0;
+				int onlyCells = 1;
+			}
+			//					   -v  
+			//					          Verbose. Print  to the stdoutput extra details of what is happening
+			String verboseSPIN = " -v ";
+
+			// Setup process to execute python script with parameters
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 	/*
 
 	 * 
