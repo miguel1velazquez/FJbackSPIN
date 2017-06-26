@@ -59,7 +59,7 @@ import com.treestar.lib.util.FJCommandLineUtil;
 import com.treestar.lib.xml.GatingML;
 import com.treestar.lib.xml.SElement;
 
-public class backSPIN implements ExternalPopulationAlgorithmInterface {
+public class backSPIN extends R_Algorithm implements ExternalPopulationAlgorithmInterface {
 
 
 	private static final String pyScript_backSPIN_Template = "pyScript.backSPIN.Template.py";
