@@ -3,6 +3,8 @@
 	<name>FJbackSPIN</name>
 	<comment></comment>
 	<projects>
+		<project>FJEngine</project>
+		<project>Library</project>
 	</projects>
 	<buildSpec>
 	</buildSpec>

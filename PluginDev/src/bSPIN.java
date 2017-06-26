@@ -1,4 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
+// Based on Josef's SPADE plugin:
 // Copyright (c) 2015 Josef Spidlen, Ph.D.
 //
 // License
@@ -20,7 +21,7 @@
 // software.    
 //////////////////////////////////////////////////////////////////////////////
 
-//package ca.bccrc.flowjo;
+//package com.flowjo.plugins;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
