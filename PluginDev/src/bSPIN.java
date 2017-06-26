@@ -1,24 +1,5 @@
-////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2015 Josef Spidlen, Ph.D.
-//
-// License
-// The software is distributed under the terms of the 
-// Artistic License 2.0
-// http://www.r-project.org/Licenses/Artistic-2.0
-// 
-// Disclaimer
-// This software and documentation come with no warranties of any kind.
-// This software is provided "as is" and any express or implied 
-// warranties, including, but not limited to, the implied warranties of
-// merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the  copyright holder be liable for any direct, 
-// indirect, incidental, special, exemplary, or consequential damages
-// (including but not limited to, procurement of substitute goods or 
-// services; loss of use, data or profits; or business interruption)
-// however caused and on any theory of liability, whether in contract,
-// strict liability, or tort arising in any way out of the use of this 
-// software.    
-//////////////////////////////////////////////////////////////////////////////
+package src;
+
 
 //package ca.bccrc.flowjo;
 import java.awt.Component;
@@ -45,9 +26,10 @@ import com.treestar.lib.gui.HBox;
 import com.treestar.lib.gui.numberfields.RangedDoubleTextField;
 import com.treestar.lib.gui.numberfields.RangedIntegerTextField;
 import com.treestar.lib.gui.panels.FJLabel;
+import com.treestar.lib.prefs.HomeEnv;
 import com.treestar.lib.xml.SElement;
 
-import ca.bccrc.flowjo.utils.DoubleNumberFormatter;
+//import ca.bccrc.flowjo.utils.DoubleNumberFormatter;
 
 public class bSPIN extends R_Algorithm {
 
@@ -70,7 +52,7 @@ public class bSPIN extends R_Algorithm {
     private static final String sLabelCutoff     = "Cutoff";
     private static final String sLabelMaxFc      = "Max Fc";
     
-    private static final String sBinSizeHelp    = "The bin size as proportion of cells, typically between 0.01 and 0.2.";
+    private static final String sBinSizeHelp    = "The bin size as proportion of cells, typically between 0.01 and 0.2";
     private static final String sCellCutoffHelp = "The number of cells to be used for a cut off, typically between 300 and 800.";
     private static final String sCutoffHelp     = "The cutoff quantile as a value from 0 to 1, or a direct cutoff threshold (>1).";
     private static final String sMaxFcHelp      = "Maximum allowed relative increase from mean norm of presumed good data.";

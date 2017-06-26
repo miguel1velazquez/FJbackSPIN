@@ -1,4 +1,5 @@
-//package com.flowjo.plugins;
+package src;
+
 
 import java.awt.Component;
 import java.awt.Desktop;
@@ -58,7 +59,7 @@ import com.treestar.lib.util.FJCommandLineUtil;
 import com.treestar.lib.xml.GatingML;
 import com.treestar.lib.xml.SElement;
 
-public class backSPIN extends R_Algorithm implements ExternalPopulationAlgorithmInterface {
+public class backSPIN implements ExternalPopulationAlgorithmInterface {
 
 
 	private static final String pyScript_backSPIN_Template = "pyScript.backSPIN.Template.py";
@@ -351,4 +352,17 @@ public class backSPIN extends R_Algorithm implements ExternalPopulationAlgorithm
 	 * Plugin accepts CSV with scale values only
 	 */
 	public ExportFileTypes useExportFileType() { return ExportFileTypes.CSV_SCALE; }
+
+	@Override
+	public boolean promptForOptions(SElement fcmlQueryElement,
+			List<String> parameterNames) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getVersion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

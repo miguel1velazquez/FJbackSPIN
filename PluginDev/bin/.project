@@ -3,6 +3,12 @@
 	<name>PluginDev</name>
 	<comment></comment>
 	<projects>
+		<project>engine-chimera</project>
+		<project>FJbackSPIN</project>
+		<project>FJEngine</project>
+		<project>FJlib</project>
+		<project>FJPlugins</project>
+		<project>Library</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
