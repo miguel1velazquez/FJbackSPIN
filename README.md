@@ -2,7 +2,7 @@
 
 Copyright (c) 2017, Miguel Velazquez and Ian Taylor.
 
-BiClustering plugin for FlowJo, LLC using BackSPIN algorithm from Zeisel et al 2013. 
+BiClustering plugin for FlowJo, LLC using backSPIN algorithm from Zeisel et al 2013. 
 
 Copyright (c) 2015, Amit Zeisel, Gioele La Manno and Sten Linnarsson
 All rights reserved.
