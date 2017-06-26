@@ -113,11 +113,7 @@ public class bSPIN extends R_Algorithm {
         return bsICON;
     }
 	
-	@Override
-	protected boolean showClusterInputField()
-	{
-		return false;
-	}
+	//Removed "something about cluster telling you or not." -MVP
 	
 	/*
 	 * This method returns a list of parameter names when supplying
