@@ -60,8 +60,8 @@ public class bSPIN extends R_Algorithm {
 	private static final String pluginVersion = "1.0";
 	private static final String pluginName = "BackSPIN";
 
-	private RangedDoubleTextField parBinSizeField = null;
-	private RangedIntegerTextField parCellCutoffField = null;
+	private RangedDoubleTextField parnumLevelsField = null;
+	private RangedIntegerTextField parnumIterations = null;
 	private RangedDoubleTextField parCutoffField = null;
 	private RangedDoubleTextField parMaxFcField = null;
 
@@ -71,15 +71,15 @@ public class bSPIN extends R_Algorithm {
 	private static final int fixedFieldHeigth = 25;
 	private static final int hSpaceHeigth = 5;
 
-	private static final String sLabelBinSize    = "Bin size (0-1)";
-	private static final String sLabelCellCutoff = "Cell Cutoff";
+	private static final String sLabelnumLevels    = "Level Number (0-8)";
+	private static final String sLabelnumIterations = "Iteration Number (2-200)";
 	private static final String sLabelCutoff     = "Cutoff";
 	private static final String sLabelMaxFc      = "Max Fc";
 
 
 	//TODO: Add tooltips to algorithm's options describing each option
-	private static final String sBinSizeHelp    = "The bin size as proportion of cells, typically between 0.01 and 0.2";
-	private static final String sCellCutoffHelp = "The number of cells to be used for a cut off, typically between 300 and 800.";
+	private static final String snumLevelsHelp    = "The number of levels used for clustering; 2^nth, n being the Level Number.";
+	private static final String snumIterationsHelp = "The number of iterations to be used for clustering.";
 	private static final String sCutoffHelp     = "The cutoff quantile as a value from 0 to 1, or a direct cutoff threshold (>1).";
 	private static final String sMaxFcHelp      = "Maximum allowed relative increase from mean norm of presumed good data.";
 
@@ -98,6 +98,7 @@ public class bSPIN extends R_Algorithm {
 	private static final String citingLabelLine4   = "Science | 06 Mar 2015 : Vol. 347, Issue 6226, pp. 1138-1142, DOI: 10.1126/science.aaa1934";
 
 	protected static final String bsICON = "images/backSPIN.png";
+	
 
 	public bSPIN() 
 	{
@@ -200,7 +201,7 @@ public class bSPIN extends R_Algorithm {
 
 		// Think of error message
 		String retString = "no command";
-
+		
 		String inFile = null;
 		String outFile = null; 
 		int numLevels = -1;
@@ -211,7 +212,8 @@ public class bSPIN extends R_Algorithm {
 		int minGene = -1;
 		int minCell = -1;
 		double minSplit = -1.00;
-
+		
+		// TODO: Create tool-tips for each input's function.
 		try{
 			//					   --input=[inputfile] -i [inputfile]
 			//					          Path of the cef formatted tab delimited file.
@@ -278,7 +280,7 @@ public class bSPIN extends R_Algorithm {
 				int onlyGene = 0;
 				int onlyCells = 1;
 			}
-
+			
 			//					   -v  
 			//					          Verbose. Print  to the stdoutput extra details of what is happening
 
@@ -366,25 +368,25 @@ public class bSPIN extends R_Algorithm {
 		double minSplit = 1.00;
 		boolean onlySPIN = false;
 
-				// If there are options set already (e.g., from the workspace), then
-				// let's retrieve those and use them instead of defaults.
-				//Without preferences for backSPIN this may be irrelavent.
-				//		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
-				//		while(iterator.hasNext()) {
-				//			SElement option = iterator.next();
-				//
-				//			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
-				//			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
-				//
-				//			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
-				//			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
-				//
-				//			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
-				//			if(savedParCutoff > 0) parCutoff = savedParCutoff;
-				//
-				//			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
-				//			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
-				//		}
+		// If there are options set already (e.g., from the workspace), then
+		// let's retrieve those and use them instead of defaults.
+		//Without preferences for backSPIN this may be irrelavent.
+		//		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
+		//		while(iterator.hasNext()) {
+		//			SElement option = iterator.next();
+		//
+		//			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
+		//			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
+		//
+		//			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
+		//			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
+		//
+		//			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
+		//			if(savedParCutoff > 0) parCutoff = savedParCutoff;
+		//
+		//			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
+		//			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
+		//		}
 
 		FJLabel hSpaceLabel1 = new FJLabel("");
 		GuiFactory.setSizes(hSpaceLabel1, new Dimension(fixedLabelWidth, hSpaceHeigth));
@@ -405,23 +407,23 @@ public class bSPIN extends R_Algorithm {
 		FJLabel hSpaceLabel9 = new FJLabel("");
 		GuiFactory.setSizes(hSpaceLabel9, new Dimension(fixedLabelWidth, hSpaceHeigth));
 
-		FJLabel labelBinSize = new FJLabel(sLabelBinSize);
-		FJLabel labelBinSizeHelp = new FJLabel(sBinSizeHelp);
-		parBinSizeField = new RangedDoubleTextField(0.0, 1.0, new FJNumberFormatter());
-		parBinSizeField.setDouble(parBinSize);
-		parBinSizeField.setToolTipText(sBinSizeHelp);
-		GuiFactory.setSizes(parBinSizeField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
-		GuiFactory.setSizes(labelBinSize, new Dimension(fixedLabelWidth, fixedLabelHeigth));
-		HBox hboxBinSize = new HBox(new Component[] { labelBinSize, parBinSizeField });
+		FJLabel labelnumLevels = new FJLabel(sLabelnumLevels);
+		FJLabel labelnumLevelsHelp = new FJLabel(snumLevelsHelp);
+		parnumLevelsField = new RangedDoubleTextField(0.0, 1.0, new FJNumberFormatter());
+		parnumLevelsField.setDouble(parnumLevels);
+		parnumLevelsField.setToolTipText(snumLevelsHelp);
+		GuiFactory.setSizes(parnumLevelsField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
+		GuiFactory.setSizes(labelnumLevels, new Dimension(fixedLabelWidth, fixedLabelHeigth));
+		HBox hboxnumLevels = new HBox(new Component[] { labelnumLevels, parnumLevelsField });
 
-		FJLabel labelCellCutoff = new FJLabel(sLabelCellCutoff);
-		FJLabel labelCellCutoffHelp = new FJLabel(sCellCutoffHelp);
-		parCellCutoffField = new RangedIntegerTextField(0, 2147483647);
-		parCellCutoffField.setInt(parCellCutoff);
-		parCellCutoffField.setToolTipText(sCellCutoffHelp);
-		GuiFactory.setSizes(parCellCutoffField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
-		GuiFactory.setSizes(labelCellCutoff, new Dimension(fixedLabelWidth, fixedLabelHeigth));
-		HBox hboxCellCutoff = new HBox(new Component[] { labelCellCutoff, parCellCutoffField });
+		FJLabel labelnumIterations = new FJLabel(sLabelnumIterations);
+		FJLabel labelnumIterationsHelp = new FJLabel(snumIterationsHelp);
+		parnumIterations = new RangedIntegerTextField(0, 200);
+		parnumIterations.setInt(numIterations);
+		parnumIterations.setToolTipText(snumIterationsHelp);
+		GuiFactory.setSizes(parnumIterations, new Dimension(fixedFieldWidth, fixedFieldHeigth));
+		GuiFactory.setSizes(labelnumIterations, new Dimension(fixedLabelWidth, fixedLabelHeigth));
+		HBox hboxnumIterations = new HBox(new Component[] { labelnumIterations, parnumIterations });
 
 		FJLabel labelCutoff = new FJLabel(sLabelCutoff);
 		FJLabel labelCutoffHelp = new FJLabel(sCutoffHelp);
@@ -446,8 +448,8 @@ public class bSPIN extends R_Algorithm {
 		componentList.add(hboxBinSize);
 
 		componentList.add(hSpaceLabel2);
-		componentList.add(labelCellCutoffHelp);
-		componentList.add(hboxCellCutoff);
+		componentList.add(labelnumIterationsHelp);
+		componentList.add(hboxnumIterations);
 
 		componentList.add(hSpaceLabel3);
 		componentList.add(labelCutoffHelp);
@@ -474,33 +476,33 @@ public class bSPIN extends R_Algorithm {
 		return componentList;
 	}
 
-
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation") we updated the code...
 	@Override
 	protected void extractPromptOptions()
 	{
 		fOptions = new HashMap<String, String>();
 		fParameterNames = new ArrayList<String>();
 
+		boolean timeParameterSelected = false;
 		// for (Object obj : fParameterNameList.getSelectedValuesList())
 		// FlowJo advised against using getSelectedValuesList() due to compatibility issues. Following the advise...
-		for (Object obj : fParameterNameList.getSelectedValuesList()) 
+		for (Object obj : fParameterNameList.getSelectedValuesList().toArray()) 
 		{
 			String parName = (new StringBuilder()).append("").append(obj).toString();
 			// FlowJo's parameter names are often in the form of Name :: Description, we only want the Name part from that
 			int parDescIndex = parName.indexOf(" :: ");
 			if(parDescIndex > 0) parName = parName.substring(0, parDescIndex);
+			if(parName.compareToIgnoreCase("Time") == 0) timeParameterSelected = true;
 			fParameterNames.add(parName);
 		}
 		// We really need the Time parameter, so we select it even if the user doesn't.
 		if(!timeParameterSelected) fParameterNames.add("Time");
 
 		// Save all the flowClean specific options
-		fOptions.put("BinSize", Double.toString(parBinSizeField.getDouble()));
-		fOptions.put("CellCutoff", Double.toString(parCellCutoffField.getInt()));
+		fOptions.put("numLevels", Double.toString(parnumLevelsField.getDouble()));
+		fOptions.put(numIterations, Double.toString(parnumIterations.getInt()));
 		fOptions.put("Cutoff", Double.toString(parCutoffField.getDouble()));
 		fOptions.put("MaxFc", Double.toString(parMaxFcField.getDouble()));
-		
 
 		fShowOutput = fShowOutputCheckBox.isSelected();
 	}
