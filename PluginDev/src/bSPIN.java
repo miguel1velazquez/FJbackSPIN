@@ -46,6 +46,7 @@ import com.treestar.lib.data.StringUtil;
 import com.treestar.lib.gui.FJList;
 import com.treestar.lib.gui.GuiFactory;
 import com.treestar.lib.gui.HBox;
+import com.treestar.lib.gui.numberfields.FJNumberFormatter;
 import com.treestar.lib.gui.numberfields.RangedDoubleTextField;
 import com.treestar.lib.gui.numberfields.RangedIntegerTextField;
 import com.treestar.lib.gui.panels.FJLabel;
@@ -58,45 +59,47 @@ public class bSPIN extends R_Algorithm {
 
 	private static final String pluginVersion = "1.0";
 	private static final String pluginName = "BackSPIN";
-	
+
 	private RangedDoubleTextField parBinSizeField = null;
-    private RangedIntegerTextField parCellCutoffField = null;
-    private RangedDoubleTextField parCutoffField = null;
-    private RangedDoubleTextField parMaxFcField = null;
-    
-    private static final int fixedLabelWidth  = 75;
-    private static final int fixedFieldWidth  = 75;
-    private static final int fixedLabelHeigth = 25;
-    private static final int fixedFieldHeigth = 25;
-    private static final int hSpaceHeigth = 5;
-    
-    private static final String sLabelBinSize    = "Bin size (0-1)";
-    private static final String sLabelCellCutoff = "Cell Cutoff";
-    private static final String sLabelCutoff     = "Cutoff";
-    private static final String sLabelMaxFc      = "Max Fc";
-    
-    private static final String sBinSizeHelp    = "The bin size as proportion of cells, typically between 0.01 and 0.2";
-    private static final String sCellCutoffHelp = "The number of cells to be used for a cut off, typically between 300 and 800.";
-    private static final String sCutoffHelp     = "The cutoff quantile as a value from 0 to 1, or a direct cutoff threshold (>1).";
-    private static final String sMaxFcHelp      = "Maximum allowed relative increase from mean norm of presumed good data.";
-    
-    public static final String sOptionNameBinSize    = "BinSize";
-    public static final String sOptionNameCellCutoff = "CellCutoff";
-    public static final String sOptionNameCutoff     = "Cutoff";
-    public static final String sOptionNameMaxFc      = "MaxFc";
-    
-    private static final String channelsLabelLine1 = "FCS channels to be checked by flowClean. Select multiple items by pressing";
-    private static final String channelsLabelLine2 = "the Shift key or toggle items by holding the Ctrl (or Cmd) keys. The Time";
-    private static final String channelsLabelLine3 = "channel must exist in order for flowClean to be able to check the data set.";
-    
-    private static final String citingLabelLine1   = "Please cite this paper if you use the BackSPIN algorithm in your work:";
-    private static final String citingLabelLine2   = "Amit Zeisel, Ana Munoz-Manchado, Sten Linnarsson, Gioele La Manno :";
-    private static final String citingLabelLine3   = "Cell types in the mouse cortex and hippocampus revealed by single-cell RNA-seq";
-    private static final String citingLabelLine4   = "Science | 06 Mar 2015 : Vol. 347, Issue 6226, pp. 1138-1142, DOI: 10.1126/science.aaa1934";
-    
-    protected static final String bsICON = "images/backSPIN.png";
-    
-    public bSPIN() 
+	private RangedIntegerTextField parCellCutoffField = null;
+	private RangedDoubleTextField parCutoffField = null;
+	private RangedDoubleTextField parMaxFcField = null;
+
+	private static final int fixedLabelWidth  = 75;
+	private static final int fixedFieldWidth  = 75;
+	private static final int fixedLabelHeigth = 25;
+	private static final int fixedFieldHeigth = 25;
+	private static final int hSpaceHeigth = 5;
+
+	private static final String sLabelBinSize    = "Bin size (0-1)";
+	private static final String sLabelCellCutoff = "Cell Cutoff";
+	private static final String sLabelCutoff     = "Cutoff";
+	private static final String sLabelMaxFc      = "Max Fc";
+
+
+	//TODO: Add tooltips to algorithm's options describing each option
+	private static final String sBinSizeHelp    = "The bin size as proportion of cells, typically between 0.01 and 0.2";
+	private static final String sCellCutoffHelp = "The number of cells to be used for a cut off, typically between 300 and 800.";
+	private static final String sCutoffHelp     = "The cutoff quantile as a value from 0 to 1, or a direct cutoff threshold (>1).";
+	private static final String sMaxFcHelp      = "Maximum allowed relative increase from mean norm of presumed good data.";
+
+	public static final String sOptionNameBinSize    = "BinSize";
+	public static final String sOptionNameCellCutoff = "CellCutoff";
+	public static final String sOptionNameCutoff     = "Cutoff";
+	public static final String sOptionNameMaxFc      = "MaxFc";
+
+	private static final String channelsLabelLine1 = "FCS channels to be checked by flowClean. Select multiple items by pressing";
+	private static final String channelsLabelLine2 = "the Shift key or toggle items by holding the Ctrl (or Cmd) keys. The Time";
+	private static final String channelsLabelLine3 = "channel must exist in order for flowClean to be able to check the data set.";
+
+	private static final String citingLabelLine1   = "Please cite this paper if you use the BackSPIN algorithm in your work:";
+	private static final String citingLabelLine2   = "Amit Zeisel, Ana Munoz-Manchado, Sten Linnarsson, Gioele La Manno :";
+	private static final String citingLabelLine3   = "Cell types in the mouse cortex and hippocampus revealed by single-cell RNA-seq";
+	private static final String citingLabelLine4   = "Science | 06 Mar 2015 : Vol. 347, Issue 6226, pp. 1138-1142, DOI: 10.1126/science.aaa1934";
+
+	protected static final String bsICON = "images/backSPIN.png";
+
+	public bSPIN() 
 	{
 		super(pluginName);
 	}
@@ -110,15 +113,15 @@ public class bSPIN extends R_Algorithm {
 	{
 		return(pluginVersion);
 	}
-	
+
 	@Override
-    protected String getIconName()
-    {
-        return bsICON;
-    }
-	
+	protected String getIconName()
+	{
+		return bsICON;
+	}
+
 	//Removed "something about cluster telling you or not." -MVP
-	
+
 	/*
 	 * This method returns a list of parameter names when supplying
 	 * the data values for the input file to your algorithm
@@ -133,7 +136,15 @@ public class bSPIN extends R_Algorithm {
 		// TODO: For testing purposes only, syso.
 		return fParameterNames;
 	}
-	
+
+	/*
+	 * The type of file BackSPIN will return
+	 */
+	@Override
+	public ExportFileTypes useExportFileType() {
+		return ExportFileTypes.CSV_SCALE;
+	}
+
 	/*
 	 * This method executes a command to the system
 	 * @param name of script
@@ -154,92 +165,106 @@ public class bSPIN extends R_Algorithm {
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * This method creates a new subfolder from the input output folder.
+	 * @param outputFolder The top level output folder input to invokeAlgorithm
+	 * @param sampleFile The input sample file
+	 * @return A new subfolder where to place files
+	 */
+
+	private static File makeOutputSubfolder(File outputFolder, File sampleFile)
+	{
+		File result = new File(outputFolder, getUniqueHash(sampleFile));
+		result.mkdirs();
+		return result;
+	}
+	/**
+	 * This method uses the input sample file's name to generate a hash string.  If the integer hash is negative,
+	 * it is converted to positive.
+	 * @param sampleFile The input sample file
+	 * @return The hash of the sample file name
+	 */
+	private static String getUniqueHash(File sampleFile)
+	{
+		int hash = sampleFile.getName().hashCode();
+		if (hash < 0)
+			hash = 0 - hash;
+		return Integer.toString(hash);
+	}
 	/*
 	 * This method formulates the backspin command from prompt options
 	 * then calls on the backspin.py script with the inputs.
 	 */
-	public static SElement performBackSPIN(String outFolderName, String inputFile, String outputFile){
+	public static String backSPINcommands(String inputfile, String outputfile, int nLevels, int iters, double widthSPIN, int numWIterations, double widthDecrease, int miniGene, int miniCell, double mSplit, double averageExpressionDiff){
 		//create a folder
-		if (outFolderName == null || outFolderName.isEmpty())
-		{
-			outFolderName = new HomeEnv().getUserTempFolder();
-			File outFN = new File(outFolderName);
-			File fName = new File("backSPIN");
-			makeOutputSubfolder(outFN, fName);
-			
-		}
-		try{
 
-			//			   			-i [inputfile]
-			//					   --input=[inputfile]
+		// Think of error message
+		String retString = "no command";
+		
+		String inFile = null;
+		String outFile = null; 
+		int numLevels = -1;
+		int numIterations = -1;
+		double wdSPIN = -1.00;
+		int numWidthIters = -1;
+		double widthDec = -1.00;
+		int minGene = -1;
+		int minCell = -1;
+		double minSplit = -1.00;
+		
+		try{
+			//					   --input=[inputfile] -i [inputfile]
 			//					          Path of the cef formatted tab delimited file.
 			//					          Rows should be genes and columns single cells/samples.
 			//					          For further information on the cef format visit:
 			//					          https://github.com/linnarsson-lab/ceftools
-			String inFile = inputFile; 
-			//					   -o [outputfile]
-			//					   --output=[outputfile]
+			if(inputfile!= "" && inputfile != null){		 inFile = inputfile;	}
+			//					   --output=[outputfile]	-o [outputfile]
 			//					          The name of the file to which the output will be written
-			String outFile = outputFile; 
+			if(outputfile!= "" && outputfile != null){	 outFile = outputfile;	}
 			//					   -d [int]
 			//					          Depth/Number of levels: The number of nested splits that will 
 			//							  be tried by the algorithm
-			int numLevels = 0;
-			String levels = "-d "+numLevels;
+			if(nLevels != 2 && nLevels != -1){	 numLevels = 2;	String levels = "-d "+numLevels;	}
 			//					   -t [int]
 			//					          Number of the iterations used in the preparatory SPIN.
 			//					          Defaults to 10
-			int numIterations = 10;
-			String iterations = "-t "+numIterations;
-			//					   -f [int]  
-			//					   Feature selection is performed before BackSPIN. Argument controls how many genes are seleceted.
-			//					   Selection is based on expected noise (a curve fit to the CV-vs-mean plot).
-			int numFeatures = 0;
-			String features = "-f "+numFeatures;
-
+			if(iters != 10 && iters != -1){	 numIterations = 10;	String iterations = "-t "+numIterations;	}
 			//					   -s [float]
 			//					          Controls the decrease rate of the width parameter used in the preparatory SPIN.
 			//					          Smaller values will increase the number of SPIN iterations and result in higher 
 			//					          precision in the first step but longer execution time.
 			//					          Defaults to 0.05
-			double widthSPIN = 0.05;
-			String wSPIN = "-s "+widthSPIN;
+			if(widthSPIN != 0.05 && widthSPIN != -1.00){	 wdSPIN = 0.05;	String wSPIN = "-s "+wdSPIN;		}
 			//					   -T [int]
 			//					          Number of the iterations used for every width parameter.
 			//					          Does not apply on the first run (use -t instead)
 			//					          Defaults to 8
-			int numWidthIters = 8;
-			String wIters = "-T "+numWidthIters;
+			if(numWIterations != 8 && numWidthIters != -1){		 numWidthIters = 8;	String wIters = "-T "+numWidthIters;	}
 			//					   -S [float]
 			//					          Controls the decrease rate of the width parameter.
 			//					          Smaller values will increase the number of SPIN iterations and result in higher 
 			//					          precision but longer execution time.
 			//					          Does not apply on the first run (use -s instead)
 			//					          Defaults to 0.25
-			double widthDecrease = 0.25;
-			String wDec = "-S " +widthDecrease;
+			if(widthDecrease!= 0.25 && widthDecrease != -1){	 widthDec = 0.25;	String wDec = "-S " +widthDec;	}
 			//					   -g [int]
 			//					          Minimal number of genes that a group must contain for splitting to be allowed.
 			//					          Defaults to 2
-			int minGene = 2;
-			String minimumGene = "-g "+minGene;
+			if(miniGene != 2 && miniGene != -1){	 minGene = 2;	String minimumGene = "-g "+minGene;	}
 			//					   -c [int]
 			//					          Minimal number of cells that a group must contain for splitting to be allowed.
 			//					          Defaults to 2
-			int minCell = 2;
-			String minimumCell = "-c "+minCell;
+			if(miniCell != 2 && miniCell!=-1){	 minCell = 2;	String minimumCell = "-c "+minCell;		}
 			//					   -k [float]
 			//					          Minimum score that a breaking point has to reach to be suitable for splitting.
 			//					          Defaults to 1.15
-			double minSplit = 1.15;
-			String minimumSplit = "-k "+minSplit;
+			if(mSplit != 1.15 && mSplit != 1.15){	 minSplit = -1.00;		String minimumSplit = "-k "+minSplit;	}
 			//					   -r [float]
 			//					          If the difference between the average expression of two groups is lower than threshold the algorythm 
 			//					          uses higly correlated genes to assign the gene to one of the two groups
 			//					          Defaults to 0.2
-			double avgExpDiff = 0.2;
-			String averageExpDiff = "-r "+avgExpDiff;
+			if(averageExpressionDiff != 0.2 && averageExpressionDiff != -1){	double avgExpDiff = 0.2;	String averageExpDiff = "-r "+avgExpDiff;	}
 			//					   -b [axisvalue]
 			//					          Run normal SPIN instead of backSPIN.
 			//					          Normal spin accepts the parameters -T -S
@@ -253,204 +278,212 @@ public class bSPIN extends R_Algorithm {
 				int onlyGene = 0;
 				int onlyCells = 1;
 			}
+			
 			//					   -v  
 			//					          Verbose. Print  to the stdoutput extra details of what is happening
+
+			// Thnk aobut adding a Java window to output this verbosity
 			String verboseSPIN = " -v ";
 
 			// Setup process to execute python script with parameters
+			return retString = inFile +" "+outFile+" "+levels+" "+iterations+" "+widthSPIN+" "+wIters+wDec+" "+minGene+" "+minCell+" "+minSplit+" "+averageExpDiff+" "+onlySPIN+" "+verboseSPIN; 
+
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 
-		return null;
+		System.err.println("Error in performBackSPIN()");
+		return "That is a moment in your life you'll never get back -IT";
 	}
-	/*
 
-	 * 
-	 */
-	@Override
-	public ExportFileTypes useExportFileType() {
-		return ExportFileTypes.CSV_SCALE;
-	}
 
 	public ExternalAlgorithmResults invokeAlgorithm(SElement fcmlQueryElement, File sampleFile, File outputFolder) 
 	{
-        ExternalAlgorithmResults results = new ExternalAlgorithmResults();
-        if(!sampleFile.exists()) 
-        {
-            results.setErrorMessage("CEF Input was Not Found");
-            return results;
-        } 
-        else
-        {
-            checkUseExistingFiles(fcmlQueryElement);
-            String sampleName = StringUtil.rtrim(sampleFile.getName(), ".fcs");
-            //FlowCleanRFlowCalc calculator = new FlowCleanRFlowCalc();
-           // File fcsCleanResult = calculator.performFCSClean(sampleFile, sampleName, preprocessCompParameterNames(), fOptions, outputFolder.getAbsolutePath(), useExistingFiles());
-           // calculator.deleteScriptFile();
-           // checkROutFile(calculator);
-           // results.setCSVFile(fcsCleanResult);
-            return results;
-        }
+		ExternalAlgorithmResults results = new ExternalAlgorithmResults();
+		if(!sampleFile.exists()) 
+		{
+			results.setErrorMessage("CEF Input was Not Found");
+			return results;
+		} 
+		else
+		{
+			checkUseExistingFiles(fcmlQueryElement);
+
+			try 
+			{
+				// Declare string and formulate backSPINcommands
+				String cmdtoCall = backSPINcommands(outFolderName, inputfile, outputfile);
+				executeCMD(cmdtoCall, "backSPIN");
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			results.setCSVFile(getCSVLOCATION());
+			return results;
+		}
 	}
-	
+
+	private File getCSVLOCATION() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected List<Component> getPromptComponents(SElement selement, List<String> list)
-    {
-        ArrayList<Component> componentList = new ArrayList<Component>();
-        
-        // 
-        FJLabel fjLabel1 = new FJLabel(channelsLabelLine1);
-        FJLabel fjLabel2 = new FJLabel(channelsLabelLine2);
-        FJLabel fjLabel3 = new FJLabel(channelsLabelLine3);
-        
-        // fParameterNameList = new FJList(new DefaultListModel<Component>());
-        // FlowJo advised against using DefaultListModel<Component>() due to compatibility issues. Following the advise...
-        fParameterNameList = new FJList(new DefaultListModel());
-        fParameterNameList.setSelectionMode(2);
-        JScrollPane parListScrollPane = new JScrollPane(fParameterNameList);
-        GuiFactory.setSizes(parListScrollPane, new Dimension(100, Math.min(200, list.size() * 20)));
-        componentList.add(fjLabel1);
-        componentList.add(fjLabel2);
-        componentList.add(fjLabel3);
-        componentList.add(parListScrollPane);
-        
-        // Default parameter values
-        double parBinSize = 0.01;
-        int parCellCutoff = 500;
-        double parCutoff = 0.5; 
-        double parMaxFc = 1.3;
-        
-        // If there are option set already (e.g., from the workspace), then
-        // let's retrieve those and use them instead of defaults.
-        Iterator<SElement> iterator = selement.getChildren("Option").iterator();
-        while(iterator.hasNext()) {
-            SElement option = iterator.next();
-            
-            double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
-            if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
-            
-            int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
-            if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
-            
-            double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
-            if(savedParCutoff > 0) parCutoff = savedParCutoff;
-            
-            double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
-            if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
-        }
-        
-        FJLabel hSpaceLabel1 = new FJLabel("");
-        GuiFactory.setSizes(hSpaceLabel1, new Dimension(fixedLabelWidth, hSpaceHeigth));
-        FJLabel hSpaceLabel2 = new FJLabel("");
-        GuiFactory.setSizes(hSpaceLabel2, new Dimension(fixedLabelWidth, hSpaceHeigth));
-        FJLabel hSpaceLabel3 = new FJLabel("");
-        GuiFactory.setSizes(hSpaceLabel3, new Dimension(fixedLabelWidth, hSpaceHeigth));
-        FJLabel hSpaceLabel4 = new FJLabel("");
-        GuiFactory.setSizes(hSpaceLabel4, new Dimension(fixedLabelWidth, hSpaceHeigth));
-        FJLabel hSpaceLabel5 = new FJLabel("");
-        GuiFactory.setSizes(hSpaceLabel5, new Dimension(fixedLabelWidth, hSpaceHeigth));
-        
-        FJLabel labelBinSize = new FJLabel(sLabelBinSize);
-        FJLabel labelBinSizeHelp = new FJLabel(sBinSizeHelp);
-        parBinSizeField = new RangedDoubleTextField(0.0, 1.0, new DoubleNumberFormatter());
-        parBinSizeField.setDouble(parBinSize);
-        parBinSizeField.setToolTipText(sBinSizeHelp);
-        GuiFactory.setSizes(parBinSizeField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
-        GuiFactory.setSizes(labelBinSize, new Dimension(fixedLabelWidth, fixedLabelHeigth));
-        HBox hboxBinSize = new HBox(new Component[] { labelBinSize, parBinSizeField });
-        
-        FJLabel labelCellCutoff = new FJLabel(sLabelCellCutoff);
-        FJLabel labelCellCutoffHelp = new FJLabel(sCellCutoffHelp);
-        parCellCutoffField = new RangedIntegerTextField(0, 2147483647);
-        parCellCutoffField.setInt(parCellCutoff);
-        parCellCutoffField.setToolTipText(sCellCutoffHelp);
-        GuiFactory.setSizes(parCellCutoffField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
-        GuiFactory.setSizes(labelCellCutoff, new Dimension(fixedLabelWidth, fixedLabelHeigth));
-        HBox hboxCellCutoff = new HBox(new Component[] { labelCellCutoff, parCellCutoffField });
-        
-        FJLabel labelCutoff = new FJLabel(sLabelCutoff);
-        FJLabel labelCutoffHelp = new FJLabel(sCutoffHelp);
-        parCutoffField = new RangedDoubleTextField(0.0, Float.MAX_VALUE, new DoubleNumberFormatter()); // Float.MAX_VALUE is enough although a doubles can hold more
-        parCutoffField.setDouble(parCutoff);
-        parCutoffField.setToolTipText(sCutoffHelp);
-        GuiFactory.setSizes(parCutoffField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
-        GuiFactory.setSizes(labelCutoff, new Dimension(fixedLabelWidth, fixedLabelHeigth));
-        HBox hboxCutoff = new HBox(new Component[] { labelCutoff, parCutoffField });
+	{
+		ArrayList<Component> componentList = new ArrayList<Component>();
 
-        FJLabel labelMaxFc = new FJLabel(sLabelMaxFc);
-        FJLabel labelMaxFcHelp = new FJLabel(sMaxFcHelp);
-        parMaxFcField = new RangedDoubleTextField(0.0, Float.MAX_VALUE, new DoubleNumberFormatter()); // Float.MAX_VALUE is enough although a doubles can hold more
-        parMaxFcField.setDouble(parMaxFc);
-        parMaxFcField.setToolTipText(sMaxFcHelp);
-        GuiFactory.setSizes(parMaxFcField, new Dimension(fixedFieldWidth, fixedLabelHeigth));
-        GuiFactory.setSizes(labelMaxFc, new Dimension(fixedLabelWidth, fixedLabelHeigth));
-        HBox hboxMaxFc = new HBox(new Component[] { labelMaxFc, parMaxFcField });
-        
-        componentList.add(hSpaceLabel1);
-        componentList.add(labelBinSizeHelp);
-        componentList.add(hboxBinSize);
-        
-        componentList.add(hSpaceLabel2);
-        componentList.add(labelCellCutoffHelp);
-        componentList.add(hboxCellCutoff);
-        
-        componentList.add(hSpaceLabel3);
-        componentList.add(labelCutoffHelp);
-        componentList.add(hboxCutoff);     
-        
-        componentList.add(hSpaceLabel4);
-        componentList.add(labelMaxFcHelp);
-        componentList.add(hboxMaxFc);
-        
-        fShowOutputCheckBox = new JCheckBox("Save the R script and output messages");
-        fShowOutputCheckBox.setToolTipText("Keep a file that shows execution of the script");
-        fShowOutputCheckBox.setSelected(fShowOutput);
-    	componentList.add(fShowOutputCheckBox);
-    	
+		// 
+		FJLabel fjLabel1 = new FJLabel(channelsLabelLine1);
+		FJLabel fjLabel2 = new FJLabel(channelsLabelLine2);
+		FJLabel fjLabel3 = new FJLabel(channelsLabelLine3);
+
+		// fParameterNameList = new FJList(new DefaultListModel<Component>());
+		// FlowJo advised against using DefaultListModel<Component>() due to compatibility issues. Following the advise...
+		fParameterNameList = new FJList(new DefaultListModel());
+		fParameterNameList.setSelectionMode(2);
+		JScrollPane parListScrollPane = new JScrollPane(fParameterNameList);
+		GuiFactory.setSizes(parListScrollPane, new Dimension(100, Math.min(200, list.size() * 20)));
+		componentList.add(fjLabel1);
+		componentList.add(fjLabel2);
+		componentList.add(fjLabel3);
+		componentList.add(parListScrollPane);
+
+		// Default parameter values
+		double parBinSize = 0.01;
+		int parCellCutoff = 500;
+		double parCutoff = 0.5; 
+		double parMaxFc = 1.3;
+
+		// If there are option set already (e.g., from the workspace), then
+		// let's retrieve those and use them instead of defaults.
+		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
+		while(iterator.hasNext()) {
+			SElement option = iterator.next();
+
+			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
+			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
+
+			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
+			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
+
+			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
+			if(savedParCutoff > 0) parCutoff = savedParCutoff;
+
+			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
+			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
+		}
+
+		FJLabel hSpaceLabel1 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel1, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel2 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel2, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel3 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel3, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel4 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel4, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel5 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel5, new Dimension(fixedLabelWidth, hSpaceHeigth));
+
+		FJLabel labelBinSize = new FJLabel(sLabelBinSize);
+		FJLabel labelBinSizeHelp = new FJLabel(sBinSizeHelp);
+		parBinSizeField = new RangedDoubleTextField(0.0, 1.0, new FJNumberFormatter());
+		parBinSizeField.setDouble(parBinSize);
+		parBinSizeField.setToolTipText(sBinSizeHelp);
+		GuiFactory.setSizes(parBinSizeField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
+		GuiFactory.setSizes(labelBinSize, new Dimension(fixedLabelWidth, fixedLabelHeigth));
+		HBox hboxBinSize = new HBox(new Component[] { labelBinSize, parBinSizeField });
+
+		FJLabel labelCellCutoff = new FJLabel(sLabelCellCutoff);
+		FJLabel labelCellCutoffHelp = new FJLabel(sCellCutoffHelp);
+		parCellCutoffField = new RangedIntegerTextField(0, 2147483647);
+		parCellCutoffField.setInt(parCellCutoff);
+		parCellCutoffField.setToolTipText(sCellCutoffHelp);
+		GuiFactory.setSizes(parCellCutoffField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
+		GuiFactory.setSizes(labelCellCutoff, new Dimension(fixedLabelWidth, fixedLabelHeigth));
+		HBox hboxCellCutoff = new HBox(new Component[] { labelCellCutoff, parCellCutoffField });
+
+		FJLabel labelCutoff = new FJLabel(sLabelCutoff);
+		FJLabel labelCutoffHelp = new FJLabel(sCutoffHelp);
+		parCutoffField = new RangedDoubleTextField(0.0, Float.MAX_VALUE, new DoubleNumberFormatter()); // Float.MAX_VALUE is enough although a doubles can hold more
+		parCutoffField.setDouble(parCutoff);
+		parCutoffField.setToolTipText(sCutoffHelp);
+		GuiFactory.setSizes(parCutoffField, new Dimension(fixedFieldWidth, fixedFieldHeigth));
+		GuiFactory.setSizes(labelCutoff, new Dimension(fixedLabelWidth, fixedLabelHeigth));
+		HBox hboxCutoff = new HBox(new Component[] { labelCutoff, parCutoffField });
+
+		FJLabel labelMaxFc = new FJLabel(sLabelMaxFc);
+		FJLabel labelMaxFcHelp = new FJLabel(sMaxFcHelp);
+		parMaxFcField = new RangedDoubleTextField(0.0, Float.MAX_VALUE, new DoubleNumberFormatter()); // Float.MAX_VALUE is enough although a doubles can hold more
+		parMaxFcField.setDouble(parMaxFc);
+		parMaxFcField.setToolTipText(sMaxFcHelp);
+		GuiFactory.setSizes(parMaxFcField, new Dimension(fixedFieldWidth, fixedLabelHeigth));
+		GuiFactory.setSizes(labelMaxFc, new Dimension(fixedLabelWidth, fixedLabelHeigth));
+		HBox hboxMaxFc = new HBox(new Component[] { labelMaxFc, parMaxFcField });
+
+		componentList.add(hSpaceLabel1);
+		componentList.add(labelBinSizeHelp);
+		componentList.add(hboxBinSize);
+
+		componentList.add(hSpaceLabel2);
+		componentList.add(labelCellCutoffHelp);
+		componentList.add(hboxCellCutoff);
+
+		componentList.add(hSpaceLabel3);
+		componentList.add(labelCutoffHelp);
+		componentList.add(hboxCutoff);     
+
+		componentList.add(hSpaceLabel4);
+		componentList.add(labelMaxFcHelp);
+		componentList.add(hboxMaxFc);
+
+		fShowOutputCheckBox = new JCheckBox("Save the R script and output messages");
+		fShowOutputCheckBox.setToolTipText("Keep a file that shows execution of the script");
+		fShowOutputCheckBox.setSelected(fShowOutput);
+		componentList.add(fShowOutputCheckBox);
+
 		if (!fRoutFile.isEmpty())
 			componentList.add(new HBox(Box.createHorizontalGlue(),  createShowOutputButton(), Box.createHorizontalGlue()));
 
-        componentList.add(hSpaceLabel5);
-        componentList.add(new FJLabel(citingLabelLine1));
-        componentList.add(new FJLabel(citingLabelLine2));
-        componentList.add(new FJLabel(citingLabelLine3));
-        componentList.add(new FJLabel(citingLabelLine4));
-        
-        return componentList;
-    }
-    
+		componentList.add(hSpaceLabel5);
+		componentList.add(new FJLabel(citingLabelLine1));
+		componentList.add(new FJLabel(citingLabelLine2));
+		componentList.add(new FJLabel(citingLabelLine3));
+		componentList.add(new FJLabel(citingLabelLine4));
+
+		return componentList;
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
-    protected void extractPromptOptions()
-    {
-    	fOptions = new HashMap<String, String>();
-    	fParameterNames = new ArrayList<String>();
+	protected void extractPromptOptions()
+	{
+		fOptions = new HashMap<String, String>();
+		fParameterNames = new ArrayList<String>();
 
-    	boolean timeParameterSelected = false;
-    	// for (Object obj : fParameterNameList.getSelectedValuesList())
-    	// FlowJo advised against using getSelectedValuesList() due to compatibility issues. Following the advise...
-    	for (Object obj : fParameterNameList.getSelectedValues()) 
-    	{
-    		String parName = (new StringBuilder()).append("").append(obj).toString();
-    		// FlowJo's parameter names are often in the form of Name :: Description, we only want the Name part from that
-    		int parDescIndex = parName.indexOf(" :: ");
-    		if(parDescIndex > 0) parName = parName.substring(0, parDescIndex);
-    		if(parName.compareToIgnoreCase("Time") == 0) timeParameterSelected = true;
-    		fParameterNames.add(parName);
-    	}
-    	// We really need the Time parameter, so we select it even if the user doesn't.
-    	if(!timeParameterSelected) fParameterNames.add("Time");
-    	
-    	// Save all the flowClean specific options
-        fOptions.put("BinSize", Double.toString(parBinSizeField.getDouble()));
-        fOptions.put("CellCutoff", Double.toString(parCellCutoffField.getInt()));
-        fOptions.put("Cutoff", Double.toString(parCutoffField.getDouble()));
-        fOptions.put("MaxFc", Double.toString(parMaxFcField.getDouble()));
+		boolean timeParameterSelected = false;
+		// for (Object obj : fParameterNameList.getSelectedValuesList())
+		// FlowJo advised against using getSelectedValuesList() due to compatibility issues. Following the advise...
+		for (Object obj : fParameterNameList.getSelectedValues()) 
+		{
+			String parName = (new StringBuilder()).append("").append(obj).toString();
+			// FlowJo's parameter names are often in the form of Name :: Description, we only want the Name part from that
+			int parDescIndex = parName.indexOf(" :: ");
+			if(parDescIndex > 0) parName = parName.substring(0, parDescIndex);
+			if(parName.compareToIgnoreCase("Time") == 0) timeParameterSelected = true;
+			fParameterNames.add(parName);
+		}
+		// We really need the Time parameter, so we select it even if the user doesn't.
+		if(!timeParameterSelected) fParameterNames.add("Time");
 
-    	fShowOutput = fShowOutputCheckBox.isSelected();
-    }
+		// Save all the flowClean specific options
+		fOptions.put("BinSize", Double.toString(parBinSizeField.getDouble()));
+		fOptions.put("CellCutoff", Double.toString(parCellCutoffField.getInt()));
+		fOptions.put("Cutoff", Double.toString(parCutoffField.getDouble()));
+		fOptions.put("MaxFc", Double.toString(parMaxFcField.getDouble()));
+
+		fShowOutput = fShowOutputCheckBox.isSelected();
+	}
 
 }
