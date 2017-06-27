@@ -88,9 +88,9 @@ public class bSPIN extends R_Algorithm {
 	public static final String sOptionNameCutoff     = "Cutoff";
 	public static final String sOptionNameMaxFc      = "MaxFc";
 
-	private static final String channelsLabelLine1 = "FCS channels to be checked by flowClean. Select multiple items by pressing";
-	private static final String channelsLabelLine2 = "the Shift key or toggle items by holding the Ctrl (or Cmd) keys. The Time";
-	private static final String channelsLabelLine3 = "channel must exist in order for flowClean to be able to check the data set.";
+	private static final String channelsLabelLine1 = "Channels to be clusterd on by backSPIN. Select multiple items by pressing";
+	private static final String channelsLabelLine2 = "the Shift key or toggle items by holding the Ctrl (or Cmd) keys. You can";
+	private static final String channelsLabelLine3 = "select individual genes, or whole gene-sets.";
 
 	private static final String citingLabelLine1   = "Please cite this paper if you use the BackSPIN algorithm in your work:";
 	private static final String citingLabelLine2   = "Amit Zeisel, Ana Munoz-Manchado, Sten Linnarsson, Gioele La Manno :";
@@ -343,6 +343,7 @@ public class bSPIN extends R_Algorithm {
 		// FlowJo advised against using DefaultListModel<Component>() due to compatibility issues. Following the advise...
 		fParameterNameList = new FJList(new DefaultListModel());
 		fParameterNameList.setSelectionMode(2);
+		// TODO: Change "JScrollPane" to SeqGeq equivalent.		
 		JScrollPane parListScrollPane = new JScrollPane(fParameterNameList);
 		GuiFactory.setSizes(parListScrollPane, new Dimension(100, Math.min(200, list.size() * 20)));
 		componentList.add(fjLabel1);
@@ -351,29 +352,39 @@ public class bSPIN extends R_Algorithm {
 		componentList.add(parListScrollPane);
 
 		// Default parameter values
-		double parBinSize = 0.01;
-		int parCellCutoff = 500;
-		double parCutoff = 0.5; 
-		double parMaxFc = 1.3;
+		// TODO: Name of CSV file output - Hashed string, which we'll need to know ahead of time.
+		String inFile = TODO;
+		// TODO: Name of population clustered (CSV file?)
+		String outFile = TODO; 
+		int numLevels = 2;
+		int numIterations = 10;
+		double wdSPIN = 0.5;
+		int numWidthIters = 8;
+		double widthDec = 0.25;
+		int minGene = 2;
+		int minCell = 2;
+		double minSplit = 1.00;
+		boolean onlySPIN = false
 
-		// If there are option set already (e.g., from the workspace), then
+		// If there are options set already (e.g., from the workspace), then
 		// let's retrieve those and use them instead of defaults.
-		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
-		while(iterator.hasNext()) {
-			SElement option = iterator.next();
-
-			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
-			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
-
-			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
-			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
-
-			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
-			if(savedParCutoff > 0) parCutoff = savedParCutoff;
-
-			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
-			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
-		}
+		//Without preferences for backSPIN this may be irrelavent.
+		//		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
+		//		while(iterator.hasNext()) {
+		//			SElement option = iterator.next();
+		//
+		//			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
+		//			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
+		//
+		//			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
+		//			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
+		//
+		//			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
+		//			if(savedParCutoff > 0) parCutoff = savedParCutoff;
+		//
+		//			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
+		//			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
+		//		}
 
 		FJLabel hSpaceLabel1 = new FJLabel("");
 		GuiFactory.setSizes(hSpaceLabel1, new Dimension(fixedLabelWidth, hSpaceHeigth));
@@ -385,6 +396,14 @@ public class bSPIN extends R_Algorithm {
 		GuiFactory.setSizes(hSpaceLabel4, new Dimension(fixedLabelWidth, hSpaceHeigth));
 		FJLabel hSpaceLabel5 = new FJLabel("");
 		GuiFactory.setSizes(hSpaceLabel5, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel6 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel6, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel7 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel7, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel8 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel8, new Dimension(fixedLabelWidth, hSpaceHeigth));
+		FJLabel hSpaceLabel9 = new FJLabel("");
+		GuiFactory.setSizes(hSpaceLabel9, new Dimension(fixedLabelWidth, hSpaceHeigth));
 
 		FJLabel labelBinSize = new FJLabel(sLabelBinSize);
 		FJLabel labelBinSizeHelp = new FJLabel(sBinSizeHelp);
