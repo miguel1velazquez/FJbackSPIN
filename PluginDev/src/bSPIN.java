@@ -200,7 +200,7 @@ public class bSPIN extends R_Algorithm {
 
 		// Think of error message
 		String retString = "no command";
-		
+
 		String inFile = null;
 		String outFile = null; 
 		int numLevels = -1;
@@ -211,7 +211,7 @@ public class bSPIN extends R_Algorithm {
 		int minGene = -1;
 		int minCell = -1;
 		double minSplit = -1.00;
-		
+
 		try{
 			//					   --input=[inputfile] -i [inputfile]
 			//					          Path of the cef formatted tab delimited file.
@@ -278,7 +278,7 @@ public class bSPIN extends R_Algorithm {
 				int onlyGene = 0;
 				int onlyCells = 1;
 			}
-			
+
 			//					   -v  
 			//					          Verbose. Print  to the stdoutput extra details of what is happening
 
@@ -353,9 +353,9 @@ public class bSPIN extends R_Algorithm {
 
 		// Default parameter values
 		// TODO: Name of CSV file output - Hashed string, which we'll need to know ahead of time.
-		String inFile = TODO;
+		String inFile = "TODO";
 		// TODO: Name of population clustered (CSV file?)
-		String outFile = TODO; 
+		String outFile = "TODO"; 
 		int numLevels = 2;
 		int numIterations = 10;
 		double wdSPIN = 0.5;
@@ -364,27 +364,27 @@ public class bSPIN extends R_Algorithm {
 		int minGene = 2;
 		int minCell = 2;
 		double minSplit = 1.00;
-		boolean onlySPIN = false
+		boolean onlySPIN = false;
 
-		// If there are options set already (e.g., from the workspace), then
-		// let's retrieve those and use them instead of defaults.
-		//Without preferences for backSPIN this may be irrelavent.
-		//		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
-		//		while(iterator.hasNext()) {
-		//			SElement option = iterator.next();
-		//
-		//			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
-		//			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
-		//
-		//			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
-		//			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
-		//
-		//			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
-		//			if(savedParCutoff > 0) parCutoff = savedParCutoff;
-		//
-		//			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
-		//			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
-		//		}
+				// If there are options set already (e.g., from the workspace), then
+				// let's retrieve those and use them instead of defaults.
+				//Without preferences for backSPIN this may be irrelavent.
+				//		Iterator<SElement> iterator = selement.getChildren("Option").iterator();
+				//		while(iterator.hasNext()) {
+				//			SElement option = iterator.next();
+				//
+				//			double savedParBinSize = option.getDouble(sOptionNameBinSize, -1);
+				//			if(savedParBinSize > 0 && savedParBinSize <= 1) parBinSize = savedParBinSize;
+				//
+				//			int savedParCellCutoff = option.getInt(sOptionNameCellCutoff, -1);
+				//			if(savedParCellCutoff > 0 && savedParCellCutoff <= 2147483647) parCellCutoff = savedParCellCutoff;
+				//
+				//			double savedParCutoff = option.getDouble(sOptionNameCutoff, -1);
+				//			if(savedParCutoff > 0) parCutoff = savedParCutoff;
+				//
+				//			double savedparMaxFc = option.getDouble(sOptionNameMaxFc, -1);
+				//			if(savedparMaxFc > 0) parMaxFc = savedparMaxFc;
+				//		}
 
 		FJLabel hSpaceLabel1 = new FJLabel("");
 		GuiFactory.setSizes(hSpaceLabel1, new Dimension(fixedLabelWidth, hSpaceHeigth));
@@ -474,6 +474,7 @@ public class bSPIN extends R_Algorithm {
 		return componentList;
 	}
 
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void extractPromptOptions()
@@ -481,16 +482,14 @@ public class bSPIN extends R_Algorithm {
 		fOptions = new HashMap<String, String>();
 		fParameterNames = new ArrayList<String>();
 
-		boolean timeParameterSelected = false;
 		// for (Object obj : fParameterNameList.getSelectedValuesList())
 		// FlowJo advised against using getSelectedValuesList() due to compatibility issues. Following the advise...
-		for (Object obj : fParameterNameList.getSelectedValues()) 
+		for (Object obj : fParameterNameList.getSelectedValuesList()) 
 		{
 			String parName = (new StringBuilder()).append("").append(obj).toString();
 			// FlowJo's parameter names are often in the form of Name :: Description, we only want the Name part from that
 			int parDescIndex = parName.indexOf(" :: ");
 			if(parDescIndex > 0) parName = parName.substring(0, parDescIndex);
-			if(parName.compareToIgnoreCase("Time") == 0) timeParameterSelected = true;
 			fParameterNames.add(parName);
 		}
 		// We really need the Time parameter, so we select it even if the user doesn't.
@@ -501,6 +500,7 @@ public class bSPIN extends R_Algorithm {
 		fOptions.put("CellCutoff", Double.toString(parCellCutoffField.getInt()));
 		fOptions.put("Cutoff", Double.toString(parCutoffField.getDouble()));
 		fOptions.put("MaxFc", Double.toString(parMaxFcField.getDouble()));
+		
 
 		fShowOutput = fShowOutputCheckBox.isSelected();
 	}
