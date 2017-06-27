@@ -7,6 +7,12 @@
 	</projects>
 	<buildSpec>
 	</buildSpec>
-	<natures>
-	</natures>
+	<natures><natures>
+            <nature>org.eclipse.jdt.core.javanature</nature>
+            <nature>org.eclipse.m2e.core.maven2Nature</nature>
+        </natures>&lt;natures&gt;
+            &lt;nature&gt;org.eclipse.jdt.core.javanature&lt;/nature&gt;
+            &lt;nature&gt;org.eclipse.m2e.core.maven2Nature&lt;/nature&gt;
+        &lt;/natures&gt;</natures>
 </projectDescription>
+<?target data?>
