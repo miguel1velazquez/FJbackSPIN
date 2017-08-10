@@ -1,9 +1,10 @@
-#backSPIN for SeqGeq
+BackSPIN plugin for SeqGeq application.
 
 Copyright (c) 2017, Miguel Velazquez and Ian Taylor.
 
 BiClustering plugin for FlowJo, LLC using backSPIN algorithm from Zeisel et al 2013. 
 
+BackSPIN algorithm and Python implementation.
 Copyright (c) 2015, Amit Zeisel, Gioele La Manno and Sten Linnarsson
 All rights reserved.
 
