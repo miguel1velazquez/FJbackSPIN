@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/pythonw
 
 # Copyright (c) 2015, Amit Zeisel, Gioele La Manno and Sten Linnarsson
 # All rights reserved.
